@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citazione del Giorno</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .quote-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .quote-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .quote-text {
+            font-size: 24px;
+            line-height: 1.6;
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        
+        .quote-author {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .quote-date {
+            font-size: 12px;
+            color: #a0aec0;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-container">
+        <div class="quote-icon">"</div>
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-author" id="quoteAuthor"></div>
+        <div class="quote-date" id="quoteDate"></div>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "La libertà non è star sopra un albero, non è neanche avere un'opinione. La libertà non è uno spazio libero, libertà è partecipazione.", author: "Giorgio Gaber" },
+            { text: "Non c'è niente di più prezioso della libertà e dell'indipendenza.", author: "Ho Chi Minh" },
+            { text: "Il successo non è definitivo, il fallimento non è fatale: ciò che conta è il coraggio di andare avanti.", author: "Winston Churchill" },
+            { text: "La vita non si misura attraverso il numero di respiri che facciamo, ma attraverso i momenti che ci lasciano senza respiro.", author: "Maya Angelou" },
+            { text: "Il futuro appartiene a coloro che credono nella bellezza dei propri sogni.", author: "Eleanor Roosevelt" },
+            { text: "Sii te stesso, tutti gli altri sono già presi.", author: "Oscar Wilde" },
+            { text: "Due cose sono infinite: l'universo e la stupidità umana, ma riguardo l'universo ho ancora dei dubbi.", author: "Albert Einstein" },
+            { text: "Chi non si muove, non può rendersi conto delle proprie catene.", author: "Rosa Luxemburg" },
+            { text: "La bellezza salverà il mondo.", author: "Fëdor Dostoevskij" },
+            { text: "Nel mezzo delle difficoltà nascono le opportunità.", author: "Albert Einstein" },
+            { text: "La vita è ciò che ti accade mentre sei impegnato a fare altri progetti.", author: "John Lennon" },
+            { text: "L'unico modo di fare un ottimo lavoro è amare quello che fai.", author: "Steve Jobs" },
+            { text: "Non si può insegnare nulla a un uomo, si può solo aiutarlo a scoprire ciò che ha dentro di sé.", author: "Galileo Galilei" },
+            { text: "Il segreto della felicità è la libertà, il segreto della libertà è il coraggio.", author: "Tucidide" },
+            { text: "Non ho paura delle tempeste, perché sto imparando a navigare sulla mia nave.", author: "Louisa May Alcott" },
+            { text: "La vita è come andare in bicicletta: per mantenere l'equilibrio devi muoverti.", author: "Albert Einstein" },
+            { text: "Il pessimista vede difficoltà in ogni opportunità. L'ottimista vede opportunità in ogni difficoltà.", author: "Winston Churchill" },
+            { text: "Scegli un lavoro che ami, e non dovrai lavorare neppure un giorno in vita tua.", author: "Confucio" },
+            { text: "La felicità non è avere quello che si desidera, ma desiderare quello che si ha.", author: "Oscar Wilde" },
+            { text: "Ama la vita più della sua logica, solo allora ne capirai il senso.", author: "Fëdor Dostoevskij" },
+            { text: "L'educazione è l'arma più potente che si può usare per cambiare il mondo.", author: "Nelson Mandela" },
+            { text: "Non importa quanto vai piano, l'importante è non fermarsi.", author: "Confucio" },
+            { text: "La cultura è ciò che rimane quando si è dimenticato tutto.", author: "Édith Piaf" },
+            { text: "Il genio è per l'1% ispirazione e per il 99% sudore.", author: "Thomas Edison" },
+            { text: "Ciò che non mi uccide, mi fortifica.", author: "Friedrich Nietzsche" },
+            { text: "Il vero viaggio di scoperta non consiste nel cercare nuove terre, ma nell'avere nuovi occhi.", author: "Marcel Proust" },
+            { text: "La semplicità è la forma della vera grandezza.", author: "Francesco De Sanctis" },
+            { text: "Chi ha un perché per vivere, può sopportare quasi ogni come.", author: "Friedrich Nietzsche" },
+            { text: "La vita inizia dove finisce la zona di comfort.", author: "Neale Donald Walsch" },
+            { text: "Non aspettare. Il momento non sarà mai quello giusto.", author: "Napoleon Hill" },
+            { text: "Il talento vince le partite, ma il lavoro di squadra e l'intelligenza vincono i campionati.", author: "Michael Jordan" },
+            { text: "L'immaginazione è più importante della conoscenza.", author: "Albert Einstein" },
+            { text: "Penso, dunque sono.", author: "René Descartes" },
+            { text: "Il sapere non è mai troppo.", author: "Leonardo da Vinci" },
+            { text: "Il coraggio non è l'assenza di paura, ma la capacità di vincerla.", author: "Nelson Mandela" },
+            { text: "La pazienza è la compagna della saggezza.", author: "Sant'Agostino" },
+            { text: "Chi non è occupato a nascere è occupato a morire.", author: "Bob Dylan" },
+            { text: "La qualità non è mai un caso; è sempre il risultato di uno sforzo intelligente.", author: "John Ruskin" },
+            { text: "Non puoi fermare le onde, ma puoi imparare a surfare.", author: "Jon Kabat-Zinn" },
+            { text: "La differenza tra l'ordinario e lo straordinario è quel piccolo extra.", author: "Jimmy Johnson" },
+            { text: "Il cambiamento è la legge della vita. Chi guarda solo al passato o al presente, perderà sicuramente il futuro.", author: "John F. Kennedy" },
+            { text: "Fai attenzione ai tuoi pensieri, perché diventeranno parole. Fai attenzione alle tue parole, perché diventeranno azioni.", author: "Margaret Thatcher" },
+            { text: "La speranza è un sogno ad occhi aperti.", author: "Aristotele" },
+            { text: "Il miglior modo per predire il futuro è crearlo.", author: "Peter Drucker" },
+            { text: "Una stanza senza libri è come un corpo senz'anima.", author: "Marco Tullio Cicerone" },
+            { text: "La vita o è un'audace avventura o non è nulla.", author: "Helen Keller" },
+            { text: "Non conta quante volte cadi, ma quante volte cadi e ti rialzi.", author: "Vince Lombardi" },
+            { text: "Il segreto per andare avanti è iniziare.", author: "Mark Twain" },
+            { text: "Ogni grande sogno inizia con un sognatore.", author: "Harriet Tubman" },
+            { text: "La vera scoperta non consiste nel trovare nuovi territori, ma nel vederli con nuovi occhi.", author: "Marcel Proust" },
+            { text: "Il modo migliore per realizzare l'impossibile è credere che sia possibile.", author: "Charles Kingsleigh" },
+            { text: "Non tutto ciò che può essere contato conta e non tutto ciò che conta può essere contato.", author: "Albert Einstein" },
+            { text: "La vita è per il 10% cosa ti accade e per il 90% come reagisci.", author: "Charles Swindoll" },
+            { text: "Il più grande rischio è non correre alcun rischio.", author: "Mark Zuckerberg" },
+            { text: "Coloro che sono abbastanza folli da pensare di poter cambiare il mondo, di solito lo fanno.", author: "Steve Jobs" },
+            { text: "Un viaggio di mille miglia comincia sempre con il primo passo.", author: "Lao Tzu" },
+            { text: "La bellezza delle cose esiste nella mente di chi le osserva.", author: "David Hume" },
+            { text: "Il tempo vola, ma i ricordi durano per sempre.", author: "Proverbio" },
+            { text: "La cosa più difficile è la decisione di agire, il resto è semplice tenacia.", author: "Amelia Earhart" },
+            { text: "Non smettere quando sei stanco, fermati quando hai finito.", author: "Marilyn Monroe" },
+            { text: "La paura uccide la mente.", author: "Frank Herbert" },
+            { text: "Sii il cambiamento che vuoi vedere nel mondo.", author: "Mahatma Gandhi" },
+            { text: "L'unica fonte della conoscenza è l'esperienza.", author: "Albert Einstein" },
+            { text: "Chi crede in se stesso non ha bisogno di convincere gli altri.", author: "Lao Tzu" },
+            { text: "Il successo è la somma di piccoli sforzi ripetuti giorno dopo giorno.", author: "Robert Collier" },
+            { text: "La creatività richiede il coraggio di lasciar andare le certezze.", author: "Erich Fromm" },
+            { text: "Tutto ciò che puoi immaginare è reale.", author: "Pablo Picasso" },
+            { text: "La vita non è un problema da risolvere, ma una realtà da esperire.", author: "Søren Kierkegaard" },
+            { text: "Il compito principale nella vita di ognuno è dare alla luce se stesso.", author: "Erich Fromm" },
+            { text: "La felicità è reale solo quando condivisa.", author: "Christopher McCandless" },
+            { text: "La mente è come un paracadute: funziona solo quando è aperta.", author: "Frank Zappa" },
+            { text: "Non c'è niente di nobile nell'essere superiore a qualcun altro. La vera nobiltà sta nell'essere superiore alla persona che eri ieri.", author: "Ernest Hemingway" },
+            { text: "Il fallimento è semplicemente l'opportunità di ricominciare, questa volta in modo più intelligente.", author: "Henry Ford" },
+            { text: "L'arte di essere saggi è l'arte di sapere cosa trascurare.", author: "William James" },
+            { text: "Chi non sa tacere, non sa neppure parlare.", author: "Ausonius" },
+            { text: "La vita è una serie di lezioni che devono essere vissute per essere comprese.", author: "Helen Keller" },
+            { text: "Non giudicare ogni giorno dal raccolto che hai ottenuto, ma dai semi che hai piantato.", author: "Robert Louis Stevenson" },
+            { text: "Il pessimista si lamenta del vento; l'ottimista aspetta che cambi; il realista regola le vele.", author: "William Arthur Ward" },
+            { text: "La vera felicità costa poco; se è cara, non è di buona qualità.", author: "François-René de Chateaubriand" },
+            { text: "La fortuna aiuta gli audaci.", author: "Virgilio" },
+            { text: "Puoi avere tutto nella vita se aiuti abbastanza persone ad avere ciò che vogliono.", author: "Zig Ziglar" },
+            { text: "La migliore vendetta è un enorme successo.", author: "Frank Sinatra" },
+            { text: "L'unica impossibilità è ciò che non si tenta.", author: "Tommy Lasorda" },
+            { text: "Il segreto per vivere bene e più a lungo è: mangiare la metà, camminare il doppio, ridere il triplo e amare senza misura.", author: "Proverbio tibetano" },
+            { text: "Il dubbio è un'opportunità di crescita, non un segno di debolezza.", author: "Anaïs Nin" },
+            { text: "La vita non è aspettare che passi la tempesta, ma imparare a ballare sotto la pioggia.", author: "Vivian Greene" },
+            { text: "Non lasciare che il rumore delle opinioni altrui soffochi la tua voce interiore.", author: "Steve Jobs" },
+            { text: "Il momento migliore per piantare un albero era vent'anni fa. Il secondo momento migliore è adesso.", author: "Proverbio cinese" },
+            { text: "La vita è una commedia per coloro che pensano e una tragedia per coloro che sentono.", author: "Horace Walpole" },
+            { text: "Il talento è dato da Dio, sii umile. La fama è data dall'uomo, sii grato. La presunzione è data da te stesso, sii attento.", author: "John Wooden" },
+            { text: "Non essere prigioniero del passato, ma architetto del futuro.", author: "Robin Sharma" },
+            { text: "Una persona che non ha mai commesso un errore non ha mai provato nulla di nuovo.", author: "Albert Einstein" },
+            { text: "Il mondo è un libro e chi non viaggia ne legge solo una pagina.", author: "Sant'Agostino" },
+            { text: "La grandezza non consiste nell'essere forti, ma nel buon uso che si fa della forza.", author: "Harriet Beecher Stowe" },
+            { text: "Ci sono anni che fanno domande e anni che rispondono.", author: "Zora Neale Hurston" },
+            { text: "Il successo non è la chiave della felicità. La felicità è la chiave del successo.", author: "Albert Schweitzer" },
+            { text: "La saggezza è figlia dell'esperienza.", author: "Leonardo da Vinci" },
+            { text: "Chi semina vento raccoglie tempesta.", author: "Proverbio" },
+            { text: "Le opportunità non capitano. Le crei tu.", author: "Chris Grosser" },
+            { text: "Se non costruisci i tuoi sogni, qualcun altro ti assumerà per costruire i suoi.", author: "Tony Gaskins" },
+            { text: "La vera ricchezza è sapersi accontentare di poco.", author: "Epicuro" },
+            { text: "Il bello della vita è che ogni giorno puoi crescere.", author: "Rita Levi-Montalcini" },
+            { text: "La determinazione è il risveglio al fatto che il percorso verso qualsiasi obiettivo dipende esclusivamente da te.", author: "Byron Pulsifer" },
+            { text: "Non è mai troppo tardi per essere ciò che avresti potuto essere.", author: "George Eliot" },
+            { text: "Il successo è camminare di fallimento in fallimento senza perdere l'entusiasmo.", author: "Winston Churchill" },
+            { text: "Tutto quello che hai sempre voluto si trova dall'altra parte della paura.", author: "George Addair" },
+            { text: "Ciò che pensiamo determina ciò che ci accade, quindi se vogliamo cambiare la nostra vita dobbiamo tendere la mente.", author: "Wayne Dyer" },
+            { text: "La mente è tutto. Diventi ciò che pensi.", author: "Buddha" },
+            { text: "I limiti, come le paure, sono spesso solo un'illusione.", author: "Michael Jordan" },
+            { text: "La vita è fatta di scelte. Devi solo assicurarti di fare quelle giuste.", author: "John C. Maxwell" },
+            { text: "Non puoi attraversare il mare semplicemente stando fermo a guardare l'acqua.", author: "Rabindranath Tagore" },
+            { text: "Fai ogni giorno una cosa che ti spaventa.", author: "Eleanor Roosevelt" },
+            { text: "L'ostacolo è la via.", author: "Marco Aurelio" },
+            { text: "Il viaggio più lungo inizia con un singolo passo.", author: "Lao Tzu" },
+            { text: "Non c'è vento favorevole per il marinaio che non sa dove andare.", author: "Seneca" },
+            { text: "La vita è troppo breve per sprecarla a realizzare i sogni degli altri.", author: "Oscar Wilde" },
+            { text: "Il successo non è quanto in alto sei arrivato, ma quanti hai portato con te.", author: "Will Rose" },
+            { text: "La differenza tra chi sogna e chi realizza è la disciplina.", author: "Anonimo" },
+            { text: "Non serve essere grandi per iniziare, ma bisogna iniziare per diventare grandi.", author: "Zig Ziglar" },
+            { text: "Il vero viaggio di scoperta non consiste nel cercare nuove terre, ma nell'avere nuovi occhi.", author: "Marcel Proust" },
+            { text: "La vita è una questione di equilibrio. Sii gentile, ma non lasciarti calpestare.", author: "Anonimo" },
+            { text: "Quello che facciamo ora echeggia nell'eternità.", author: "Marco Aurelio" },
+            { text: "Non smettere mai di imparare, perché la vita non smette mai di insegnare.", author: "Anonimo" },
+            { text: "Chi sa ascoltare non soltanto è simpatico a tutti, ma prima o poi finisce con l'imparare qualcosa.", author: "Wilson Mizner" },
+            { text: "Il tempo è la moneta della tua vita. È l'unica che hai e solo tu puoi determinare come spenderla.", author: "Carl Sandburg" },
+            { text: "La creatività è l'intelligenza che si diverte.", author: "Albert Einstein" },
+            { text: "Non esistono fallimenti, solo risultati.", author: "Tony Robbins" },
+            { text: "La felicità dipende da noi stessi.", author: "Aristotele" },
+            { text: "Se puoi sognarlo, puoi farlo.", author: "Walt Disney" },
+            { text: "Credi in te stesso e tutto è possibile.", author: "Anonimo" },
+            { text: "La vita è un'eco. Quello che mandi fuori, torna indietro.", author: "Zig Ziglar" },
+            { text: "Non aspettare l'opportunità. Creala.", author: "George Bernard Shaw" },
+            { text: "L'unico limite alla tua realizzazione di domani sono i tuoi dubbi di oggi.", author: "Franklin D. Roosevelt" },
+            { text: "Chi non risica non rosica.", author: "Proverbio italiano" },
+            { text: "La gratitudine è la memoria del cuore.", author: "Jean-Baptiste Massieu" },
+            { text: "Ogni esperto è stato una volta un principiante.", author: "Helen Hayes" },
+            { text: "La vita è come uno specchio: ti sorride se la guardi sorridendo.", author: "Proverbio" },
+            { text: "Il segreto della felicità è avere qualcosa da fare, qualcuno da amare e qualcosa in cui sperare.", author: "Immanuel Kant" },
+            { text: "Non importa quanto lentamente vai, purché non ti fermi.", author: "Confucio" },
+            { text: "Il futuro influenza il presente tanto quanto il passato.", author: "Friedrich Nietzsche" },
+            { text: "La vera misura di un uomo non è come si comporta nei momenti di conforto, ma come si erge nei tempi di sfida e controversia.", author: "Martin Luther King Jr." },
+            { text: "Nulla è permanente tranne il cambiamento.", author: "Eraclito" },
+            { text: "Ogni momento è un nuovo inizio.", author: "T.S. Eliot" },
+            { text: "La vita è quello che succede mentre sei occupato a fare altri piani.", author: "Allen Saunders" },
+            { text: "Il successo non viene dall'assenza di problemi, ma dalla capacità di affrontarli.", author: "Anonimo" },
+            { text: "Il giorno in cui smetterai di imparare sarà il giorno in cui smetterai di vivere.", author: "Anonimo" },
+            { text: "Un vincitore è un sognatore che non ha mai smesso di sognare.", author: "Nelson Mandela" },
+            { text: "La vita non è un problema da risolvere, ma una realtà da sperimentare.", author: "Søren Kierkegaard" },
+            { text: "La misura dell'intelligenza è la capacità di cambiare.", author: "Albert Einstein" },
+            { text: "Le grandi menti discutono idee; le menti medie discutono eventi; le piccole menti discutono persone.", author: "Eleanor Roosevelt" },
+            { text: "Se vuoi qualcosa che non hai mai avuto, devi fare qualcosa che non hai mai fatto.", author: "Thomas Jefferson" },
+            { text: "La cosa più coraggiosa che tu possa fare è pensare con la tua testa. Ad alta voce.", author: "Coco Chanel" },
+            { text: "Il successo è fare ciò che ami e amare ciò che fai.", author: "Anonimo" },
+            { text: "Vivi come se dovessi morire domani. Impara come se dovessi vivere per sempre.", author: "Mahatma Gandhi" },
+            { text: "Chi vuole fare qualcosa trova un modo, chi non vuole fare niente trova una scusa.", author: "Proverbio arabo" },
+            { text: "La felicità non è qualcosa di pronto. Viene dalle tue stesse azioni.", author: "Dalai Lama" },
+            { text: "Nessuno può farti sentire inferiore senza il tuo consenso.", author: "Eleanor Roosevelt" },
+            { text: "Il vero segreto della felicità è chiedere molto a se stessi e poco agli altri.", author: "Albert Camus" },
+            { text: "Devi essere il cambiamento che vuoi vedere nel mondo.", author: "Mahatma Gandhi" },
+            { text: "La domanda non è chi mi lascerà fare questo, ma chi mi fermerà.", author: "Ayn Rand" },
+            { text: "Siamo ciò che facciamo ripetutamente. L'eccellenza, quindi, non è un atto ma un'abitudine.", author: "Aristotele" },
+            { text: "La vita è un'avventura audace o non è nulla.", author: "Helen Keller" },
+            { text: "Chi non è curioso non scoprirà nulla.", author: "Anonimo" },
+            { text: "La vera saggezza viene dall'esperienza.", author: "Konrad Adenauer" },
+            { text: "Se la vita ti dà limoni, fai una limonata.", author: "Elbert Hubbard" },
+            { text: "Il talento senza lavoro duro è sprecato.", author: "Anonimo" },
+            { text: "Le persone di successo fanno ciò che le persone senza successo non hanno voglia di fare.", author: "Jeff Olson" },
+            { text: "Non è mai troppo tardi per essere quello che avresti potuto essere.", author: "George Eliot" },
+            { text: "La vita è davvero semplice, ma noi insistiamo nel renderla complicata.", author: "Confucio" },
+            { text: "Il pessimista vede difficoltà in ogni opportunità; l'ottimista vede opportunità in ogni difficoltà.", author: "Winston Churchill" },
+            { text: "Ciò che conta nella vita non è il semplice fatto di aver vissuto. È la differenza che abbiamo fatto nella vita degli altri.", author: "Nelson Mandela" },
+            { text: "Non si può scoprire nuovi oceani a meno che non si abbia il coraggio di perdere di vista la riva.", author: "André Gide" },
+            { text: "La vita è quello che succede quando sei impegnato a fare altri piani.", author: "John Lennon" },
+            { text: "La bellezza è nella mente di chi guarda.", author: "Margaret Wolfe Hungerford" },
+            { text: "Il genio è fatto dall'1% di talento e dal 99% di lavoro.", author: "Thomas Edison" },
+            { text: "Non c'è vento favorevole per chi non sa dove andare.", author: "Seneca" },
+            { text: "L'unico modo per fare un buon lavoro è amare ciò che fai.", author: "Steve Jobs" },
+            { text: "La vita ci dà sempre una seconda possibilità. Si chiama domani.", author: "Anonimo" },
+            { text: "Le persone che sono abbastanza pazze da pensare di poter cambiare il mondo sono quelle che lo cambiano davvero.", author: "Steve Jobs" },
+            { text: "Il successo non è la chiave della felicità. La felicità è la chiave del successo.", author: "Herman Cain" },
+            { text: "Non conta quanto sei bravo. Conta quanto vuoi essere bravo.", author: "Anonimo" },
+            { text: "La fortuna favorisce la mente preparata.", author: "Louis Pasteur" },
+            { text: "Se puoi immaginarlo, puoi realizzarlo.", author: "William Arthur Ward" },
+            { text: "Il modo migliore per predire il futuro è inventarlo.", author: "Alan Kay" },
+            { text: "La vita è un dono prezioso. Non sprecarlo.", author: "Anonimo" },
+            { text: "Chi non corre rischi non beve champagne.", author: "Proverbio russo" },
+            { text: "Pensa positivo e le cose positive accadranno.", author: "Anonimo" },
+            { text: "La vita è bella. Ammirala. La vita è ricchezza. Conservala.", author: "Madre Teresa di Calcutta" }
+        ];
+
+        function getDailyQuote() {
+            const today = new Date();
+            const startOfYear = new Date(today.getFullYear(), 0, 0);
+            const diff = today - startOfYear;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            const index = dayOfYear % quotes.length;
+            return quotes[index];
+        }
+
+        function displayQuote() {
+            const quote = getDailyQuote();
+            document.getElementById('quoteText').textContent = quote.text;
+            document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
+            
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('quoteDate').textContent = today.toLocaleDateString('it-IT', options);
+        }
+
+        displayQuote();
+    </script>
+</body>
+</html>
